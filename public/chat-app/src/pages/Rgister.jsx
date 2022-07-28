@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Link, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,6 +7,12 @@ import axios from "axios";
 import {registerRouter} from "../utils/APIRoutes"
 
 const Rgister = () => {
+
+  useEffect(() => {
+    if (localStorage.getItem('chat-app-user')) {
+     navigate("/");
+     }
+ }, []);
 
 const navigate=useNavigate()
 
@@ -73,6 +79,7 @@ const navigate=useNavigate()
   };
   return (
     <>
+    
       <FormContainer>
         <div className="brand">
           <img

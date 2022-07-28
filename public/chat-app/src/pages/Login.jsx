@@ -15,13 +15,13 @@ export default function Login() {
     autoClose: 8000,
     pauseOnHover: true,
     draggable: true,
-    theme: "dark",
+    theme: "light",
   };
-  // useEffect(() => {
-  //   if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-  //     navigate("/");
-  //   }
-  // }, []);
+ useEffect(() => {
+    if (localStorage.getItem('chat-app-user')) {
+     navigate("/");
+     }
+ }, []);
 
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -51,6 +51,7 @@ export default function Login() {
         toast.error(data.msg, toastOptions);
       }
       if (data.status === true) {
+        localStorage.setItem("chat-app-user",JSON.stringify(data.user))
         console.log(data.status)
 
         navigate("/");
@@ -63,8 +64,8 @@ export default function Login() {
       <FormContainer>
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
-            <img src={Logo} alt="logo" />
-            <h1>snappy</h1>
+            <img src="https://storage.googleapis.com/webdesignledger.pub.network/WDL/12f213e1-t1.jpg" alt="logo" />
+            <h1>Tesla Chat App</h1>
           </div>
           <input
             type="text"
@@ -127,7 +128,7 @@ const FormContainer = styled.div`
     padding: 1rem;
     border: 0.1rem solid #4e0eff;
     border-radius: 0.4rem;
-    color: white;
+
     width: 100%;
     font-size: 1rem;
     &:focus {
