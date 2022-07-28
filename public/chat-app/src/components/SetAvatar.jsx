@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Buffer } from "buffer";
-
+import loader from "../assets/loader.gif";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -22,8 +22,7 @@ export default function SetAvatar() {
   };
 
   useEffect(async () => {
-    console.log(localStorage.getItem('chat-app-user'))
-    if (!localStorage.getItem('chat-app-user'))
+    if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
   }, []);
 
@@ -32,7 +31,7 @@ export default function SetAvatar() {
       toast.error("Please select an avatar", toastOptions);
     } else {
       const user = await JSON.parse(
-        localStorage.getItem('chat-app-user')
+        localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
 
       const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
@@ -42,7 +41,8 @@ export default function SetAvatar() {
       if (data.isSet) {
         user.isAvatarImageSet = true;
         user.avatarImage = data.image;
-        localStorage.setItem("chat-app-user",
+        localStorage.setItem(
+          process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(user)
         );
         navigate("/");
@@ -68,7 +68,7 @@ export default function SetAvatar() {
     <>
       {isLoading ? (
         <Container>
-          <img src="https://i.gifer.com/ZZ5H.gif" alt="loader" className="loader" />
+          <img src={loader} alt="loader" className="loader" />
         </Container>
       ) : (
         <Container>
@@ -103,27 +103,29 @@ export default function SetAvatar() {
   );
 }
 
-
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 3rem;
-  background-color: white;
+  background-color: #131324;
   height: 100vh;
   width: 100vw;
+
   .loader {
     max-inline-size: 100%;
   }
+
   .title-container {
     h1 {
-      color: black;
+      color: white;
     }
   }
   .avatars {
     display: flex;
     gap: 2rem;
+
     .avatar {
       border: 0.4rem solid transparent;
       padding: 0.4rem;
@@ -156,4 +158,3 @@ const Container = styled.div`
     }
   }
 `;
-
