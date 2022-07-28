@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import {registerRouter} from "../utils/APIRoutes"
 
 const Rgister = () => {
+
+const navigate=useNavigate()
+
+
   const toastOptions = {
     position: "top-right",
     autoClose: 8000,
@@ -23,9 +29,22 @@ const Rgister = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleValidation();
+    if(handleValidation()){
+      const {password,username, email}=text;
+      const {data}=await axios.post(registerRouter,{
+        username, email, password,
+      });
+      if(data.status===false){
+        toast.error(data.msg, toastOptions);
+
+      }
+      if(data.status===true){
+        localStorage.setItem("chat-app-user",JSON.stringify(data.user))
+      }
+      navigate("/login")
+    };
   };
 
   const handleValidation = () => {

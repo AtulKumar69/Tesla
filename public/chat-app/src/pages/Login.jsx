@@ -1,81 +1,95 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
+import { useNavigate, Link } from "react-router-dom";
+import Logo from "../../src/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { loginRouter } from "../utils/APIRoutes";
 
-const Login = () => {
+export default function Login() {
+  const navigate = useNavigate();
+  const [values, setValues] = useState({ username: "", password: "" });
   const toastOptions = {
-    position: "top-right",
+    position: "bottom-right",
     autoClose: 8000,
     pauseOnHover: true,
     draggable: true,
+    theme: "dark",
   };
-  const [text, setText] = useState({
-    username: "",
-    password: "",
-  });
-  const handleChange = (e) => {
-    setText({
-      ...text,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleValidation();
+  // useEffect(() => {
+  //   if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+  //     navigate("/");
+  //   }
+  // }, []);
+
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
   };
 
-  const handleValidation = () => {
-    const { password,username } = text;
-    if (password==="") {
-      toast.error("Password and Email required", toastOptions);
+  const validateForm = () => {
+    const { username, password } = values;
+    if (username === "") {
+      toast.error("Email and Password is required.", toastOptions);
       return false;
-    } else if (username === "") {
-      toast.error(
-        "Password and Email required",
-        toastOptions
-      );
+    } else if (password === "") {
+      toast.error("Email and Password is required.", toastOptions);
       return false;
     }
-
     return true;
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (validateForm()) {
+      const { username, password } = values;
+      const { data } = await axios.post(loginRouter, {
+        username,
+        password,
+      });
+      if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+      }
+      if (data.status === true) {
+        console.log(data.status)
+
+        navigate("/");
+        }
+    }
+  };
+
   return (
     <>
       <FormContainer>
-        <div className="brand">
-          <img
-            src="https://storage.googleapis.com/webdesignledger.pub.network/WDL/12f213e1-t1.jpg"
-            alt="logo"
-          />
-          <h1>Tesla Chat App</h1>
-        </div>
-        <Form onSubmit={(e) => handleSubmit(e)}>
-          <Input
+        <form action="" onSubmit={(event) => handleSubmit(event)}>
+          <div className="brand">
+            <img src={Logo} alt="logo" />
+            <h1>snappy</h1>
+          </div>
+          <input
             type="text"
             placeholder="Username"
             name="username"
             onChange={(e) => handleChange(e)}
             min="3"
           />
-
-          <Input
+          <input
             type="password"
             placeholder="Password"
             name="password"
             onChange={(e) => handleChange(e)}
           />
-          <Button type="submit">Login</Button>
-          <Span>
-            Don't have an account ? <Link to="/register">Register</Link>
-          </Span>
-        </Form>
+          <button type="submit">Log In</button>
+          <span>
+            Don't have an account ? <Link to="/register">Create One.</Link>
+          </span>
+        </form>
       </FormContainer>
       <ToastContainer />
     </>
   );
-};
+}
+
 
 const FormContainer = styled.div`
   height: 100vh;
@@ -85,66 +99,63 @@ const FormContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   align-items: center;
+  background-color: white;
   .brand {
     display: flex;
     align-items: center;
     gap: 1rem;
     justify-content: center;
     img {
-      height: 2rem;
+      height: 5rem;
     }
     h1 {
-      color: black;
+      // color: white;
+      text-transform: uppercase;
+    }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    // background-color: #00000076;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 2rem;
+    padding: 5rem;
+  }
+  input {
+    background-color: transparent;
+    padding: 1rem;
+    border: 0.1rem solid #4e0eff;
+    border-radius: 0.4rem;
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+    &:focus {
+      border: 0.1rem solid #997af0;
+      outline: none;
+    }
+  }
+  button {
+    background-color: #4e0eff;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    &:hover {
+      background-color: #4e0eff;
+    }
+  }
+  span {
+  
+    text-transform: uppercase;
+    a {
+      color: #4e0eff;
+      text-decoration: none;
+      font-weight: bold;
     }
   }
 `;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-//   background-color: black;
-box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-  border-radius: 2rem;
-  padding: 3rem 6.5rem 3rem 5rem;
-`;
-const Input = styled.input`
-  background-color: transparent;
-  padding: 1rem;
-  border: 0.1rem solid black;
-  border-radius: 0.4rem;
-  color: black;
-  width: 100%;
-  font-size: 1rem;
-  &:focus {
-    border: 0.1rem solid black;
-    outline: none;
-  }
-`;
-
-const Button = styled.button`
-  background-color: black;
-  color: white;
-  width: 115%;
-  padding: 1rem 3rem;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 0.4rem;
-  font-size: 1rem;
-  text-transform: uppercase;
-  transistion: 0.5s ease-in-out;
-  &:hover {
-    background-color: #4136a7;
-  }
-`;
-
-const Span = styled.span`
-  color: black;
-  a {
-    text-decoration: none;
-    font-weight: bold;
-  }
-`;
-
-export default Login;
