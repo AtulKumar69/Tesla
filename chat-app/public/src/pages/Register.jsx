@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
-import Logo from "../assets/logo.svg";
+import Logo from "../assets/logo1.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../utils/APIRoutes";
@@ -89,8 +89,8 @@ export default function Register() {
       <FormContainer>
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
-            <img src={Logo} alt="logo" />
-            <h1>snappy</h1>
+            <img src={Logo} alt="logo1" />
+            <h1>Tesla Chat App</h1>
           </div>
           <input
             type="text"
@@ -135,7 +135,7 @@ const FormContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  background-color: #131324;
+  background-color: grey;
   .brand {
     display: flex;
     align-items: center;
@@ -145,7 +145,7 @@ const FormContainer = styled.div`
       height: 5rem;
     }
     h1 {
-      color: white;
+      color: red;
       text-transform: uppercase;
     }
   }
@@ -154,7 +154,8 @@ const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    background-color: #00000076;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 2rem;
     padding: 3rem 5rem;
   }
@@ -163,7 +164,7 @@ const FormContainer = styled.div`
     padding: 1rem;
     border: 0.1rem solid #4e0eff;
     border-radius: 0.4rem;
-    color: white;
+    // color: white;
     width: 100%;
     font-size: 1rem;
     &:focus {
@@ -186,7 +187,7 @@ const FormContainer = styled.div`
     }
   }
   span {
-    color: white;
+    // color: ;
     text-transform: uppercase;
     a {
       color: #4e0eff;
