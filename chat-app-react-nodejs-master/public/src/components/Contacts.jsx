@@ -21,6 +21,7 @@ export default function Contacts({ contacts, changeChat }) {
     <>
       {currentUserImage && currentUserImage && (
         <Container>
+        
           <div className="brand">
             <img src={Logo} alt="logo" />
             <h3>snappy</h3>
@@ -73,6 +74,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
+  
     justify-content: center;
     img {
       height: 2rem;
@@ -84,6 +86,7 @@ const Container = styled.div`
   }
   .contacts {
     display: flex;
+    border:1px solid red;
     flex-direction: column;
     align-items: center;
     overflow: auto;
@@ -99,6 +102,7 @@ const Container = styled.div`
     .contact {
       background-color: #ffffff34;
       min-height: 5rem;
+    
       cursor: pointer;
       width: 90%;
       border-radius: 0.2rem;
@@ -115,6 +119,7 @@ const Container = styled.div`
       .username {
         h3 {
           color: white;
+          
         }
       }
     }
